@@ -2,7 +2,11 @@ import random
 import string
 import re
 from base64 import b64encode
-from termcolor import colored
+# Patching this, output is ruined otherwise
+# from termcolor import colored
+
+def colored(prepend, color, attrs):
+    return prepend
 
 def gen_random_string(length=10):
 	return ''.join(random.sample(string.ascii_letters, int(length)))

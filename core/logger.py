@@ -1,13 +1,20 @@
 import logging
 import sys
 import re
-from termcolor import colored
+import os
+# Patching this, output is ruined otherwise
+# from termcolor import colored
 from datetime import datetime
 
 #The following hooks the FileHandler.emit function to remove ansi chars before logging to a file
 #There must be a better way of doing this...
 
 ansi_escape = re.compile(r'\x1b[^m]*m')
+
+plain_print = os.getenv('CRACKMAPEXEC_PLAINPRINT', True)
+
+def colored(prepend, color, attrs):
+    return prepend
 
 def antiansi_emit(self, record):
 
@@ -18,6 +25,9 @@ def antiansi_emit(self, record):
     logging.StreamHandler.emit(self, record)
 
 logging.FileHandler.emit = antiansi_emit
+
+# if plain_print == True:
+#     logging.StreamHandler.emit = antiansi_emit
 
 ####################################################################
 
@@ -101,6 +111,7 @@ def setup_logger(level=logging.INFO, log_to_file=False, log_prefix=None, logger_
 
     streamHandler = logging.StreamHandler(sys.stdout)
     streamHandler.setFormatter(formatter)
+    # streamHandler.emit = antiansi_emit
 
     cme_logger = logging.getLogger(logger_name)
     cme_logger.propagate = False
