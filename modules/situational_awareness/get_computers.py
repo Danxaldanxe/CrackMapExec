@@ -1,6 +1,9 @@
+import os
 from core.helpers import create_ps_command, obfs_ps_script
 from StringIO import StringIO
 from datetime import datetime
+
+base_dir = os.getenv('CRACKMAPEXEC_BASEDIR', "/opt/crackmapexec")
 
 class CMEModule:
     '''
@@ -71,7 +74,7 @@ class CMEModule:
             request.send_response(200)
             request.end_headers()
 
-            with open('data/PowerSploit/Recon/PowerView.ps1', 'r') as ps_script:
+            with open(os.path.join(base_dir,'data/PowerSploit/Recon/PowerView.ps1'), 'r') as ps_script:
                 ps_script = obfs_ps_script(ps_script.read())
                 request.wfile.write(ps_script)
 
@@ -97,6 +100,9 @@ class CMEModule:
             print_post_data(data)
 
         log_name = 'Computers-{}-{}.log'.format(response.client_address[0], datetime.now().strftime("%Y-%m-%d_%H%M%S"))
-        with open('logs/' + log_name, 'w') as log_file:
-            log_file.write(data)
-        context.log.info("Saved output to {}".format(log_name))
+        try: 
+            with open('logs/' + log_name, 'w') as log_file:
+                log_file.write(data)
+            context.log.info("Saved output to {}".format(log_name))
+        except Exception:
+                pass

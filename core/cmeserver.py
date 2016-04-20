@@ -1,11 +1,14 @@
 import BaseHTTPServer
 import threading
 import ssl
+import os
 from BaseHTTPServer import BaseHTTPRequestHandler
 from logging import getLogger
 from gevent import sleep
 from core.helpers import highlight
 from core.logger import CMEAdapter
+
+base_dir = os.getenv('CRACKMAPEXEC_BASEDIR', "/opt/crackmapexec")
 
 class RequestHandler(BaseHTTPRequestHandler):
 
@@ -48,7 +51,7 @@ class CMEServer(threading.Thread):
             self.server.log     = context.log
 
             if server_type == 'https':
-                self.server.socket = ssl.wrap_socket(self.server.socket, certfile='data/cme.pem', server_side=True)
+                self.server.socket = ssl.wrap_socket(self.server.socket, certfile=os.path.join(base_dir,'data/cme.pem'), server_side=True)
 
         except Exception as e:
             print 'Error starting CME Server: {}'.format(e)

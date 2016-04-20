@@ -4,6 +4,8 @@ from base64 import b64encode
 import sys
 import os
 
+base_dir = os.getenv('CRACKMAPEXEC_BASEDIR', "/opt/crackmapexec")
+
 class CMEModule:
 
     '''
@@ -124,7 +126,7 @@ class CMEModule:
             request.send_response(200)
             request.end_headers()
 
-            with open('data/PowerSploit/Exfiltration/Invoke-TokenManipulation.ps1', 'r') as ps_script:
+            with open(os.path.join(base_dir,'data/PowerSploit/Exfiltration/Invoke-TokenManipulation.ps1'), 'r') as ps_script:
                 ps_script = obfs_ps_script(ps_script.read(), self.obfs_name)
                 request.wfile.write(ps_script)
 

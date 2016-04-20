@@ -187,7 +187,7 @@ if args.module:
         logger.error('Path to module invalid!')
         sys.exit(1)
     else:
-        module = imp.load_source('payload_module', args.module).CMEModule()
+        module = imp.load_source('payload_module', os.path.join(base_dir,args.module)).CMEModule()
         if not hasattr(module, 'name'):
             logger.error('Module missing the name variable!')
             sys.exit(1)

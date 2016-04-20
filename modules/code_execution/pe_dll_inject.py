@@ -2,6 +2,8 @@ from core.helpers import gen_random_string, create_ps_command, obfs_ps_script
 from sys import exit
 import os
 
+base_dir = os.getenv('CRACKMAPEXEC_BASEDIR', "/opt/crackmapexec")
+
 class CMEModule:
     '''
         Downloads the specified DLL/EXE and injects it into memory using PowerSploit's Invoke-ReflectivePEInjection.ps1 script
@@ -64,7 +66,7 @@ class CMEModule:
             request.send_response(200)
             request.end_headers()
 
-            with open('data/PowerSploit/CodeExecution/Invoke-ReflectivePEInjection.ps1', 'r') as ps_script:
+            with open(os.path.join(base_dir,'data/PowerSploit/CodeExecution/Invoke-ReflectivePEInjection.ps1'), 'r') as ps_script:
                 ps_script = obfs_ps_script(ps_script.read(), self.obfs_name)
                 request.wfile.write(ps_script)
 
