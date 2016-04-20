@@ -24,8 +24,8 @@ import os
 import logging
 import sys
 
-VERSION  = '3.0'
-CODENAME = '\'So looong gay boy!\''
+VERSION  = '4.0'
+CODENAME = '\'Clean your fucking code up #FML\''
 
 parser = argparse.ArgumentParser(description=""" 
   ______ .______           ___        ______  __  ___ .___  ___.      ___      .______    _______ ___   ___  _______   ______ 
